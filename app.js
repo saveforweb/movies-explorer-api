@@ -36,6 +36,16 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '63a31d16b8f35f108c37855c',
+  };
+  next();
+});
+
+app.use('/users', require('./routes/users'));
+app.use('/movies', require('./routes/movies'));
+
 app.use('*', (req, res, next) => {
   next(new errorsList.NotFoundError('Страница не найдена.'));
 });

@@ -56,3 +56,46 @@ module.exports.login = (req, res, next) => {
       next(err);
     });
 };
+
+module.exports.getUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (user === null) {
+        next(new errorsList.NotFoundError('Пользователь не найден.'));
+      } else {
+        res.send({ data: user });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new errorsList.BadRequestError('Переданы некорректные данные при запросе пользователя.'));
+      } else {
+        next(err);
+      }
+    });
+};
+
+module.exports.updateUser = (req, res, next) => {
+  const { name, email } = req.body;
+
+  User.findByIdAndUpdate(req.user._id, { name, email }, {
+    new: true,
+    runValidators: true,
+  })
+    .then((user) => {
+      if (user === null) {
+        next(new errorsList.NotFoundError('Пользователь не найден.'));
+      } else {
+        res.send({ data: user });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new errorsList.BadRequestError('Переданы некорректные данные при обновлении профиля.'));
+      } else if (err.name === 'ValidationError') {
+        next(new errorsList.BadRequestError('Переданы некорректные данные при обновлении профиля.'));
+      } else {
+        next(err);
+      }
+    });
+};
