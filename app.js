@@ -4,8 +4,10 @@ const { celebrate, Joi, errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const errorsList = require('./errors/index');
 const { errorCodes } = require('./utils/errorCodes');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { login, createUser } = require('./controllers/users');
+const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -20,6 +22,8 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', (err) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -36,12 +40,7 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '63a31d16b8f35f108c37855c',
-  };
-  next();
-});
+app.use(auth);
 
 app.use('/users', require('./routes/users'));
 app.use('/movies', require('./routes/movies'));
@@ -49,6 +48,8 @@ app.use('/movies', require('./routes/movies'));
 app.use('*', (req, res, next) => {
   next(new errorsList.NotFoundError('Страница не найдена.'));
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
