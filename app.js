@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const limiter = require('./utils/limiter');
 const { errorCodes } = require('./utils/errorCodes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -9,6 +11,10 @@ const router = require('./routes/index');
 
 const { PORT = 3000, NODE_ENV, DATA_BASE_URL } = process.env;
 const app = express();
+
+app.use(limiter);
+
+app.use(helmet());
 
 const dataBaseUrl = NODE_ENV === 'production' ? DATA_BASE_URL : 'mongodb://localhost:27017/bitfilmsdb';
 
