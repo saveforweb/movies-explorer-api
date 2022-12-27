@@ -1,13 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
 const bodyParser = require('body-parser');
-const errorsList = require('./errors/index');
 const { errorCodes } = require('./utils/errorCodes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { login, createUser } = require('./controllers/users');
-const auth = require('./middlewares/auth');
+const router = require('./routes/index');
 
 const { PORT = 3000, NODE_ENV, DATA_BASE_URL } = process.env;
 const app = express();
@@ -27,29 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-  }),
-}), login);
-
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-  }),
-}), createUser);
-
-app.use(auth);
-
-app.use('/users', require('./routes/users'));
-app.use('/movies', require('./routes/movies'));
-
-app.use('*', (req, res, next) => {
-  next(new errorsList.NotFoundError('Страница не найдена.'));
-});
+app.use(router);
 
 app.use(errorLogger);
 
