@@ -9,10 +9,12 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, DATA_BASE_URL } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', (err) => {
+const dataBaseUrl = NODE_ENV === 'production' ? DATA_BASE_URL : 'mongodb://localhost:27017/bitfilmsdb';
+
+mongoose.connect(dataBaseUrl, (err) => {
   if (err) {
     console.log(err);
   } else {
