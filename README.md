@@ -1,9 +1,13 @@
 # movies-explorer-api
+
 Домен API: [https://api.antonmovies.nomoredomains.club](https://api.antonmovies.nomoredomains.club)
 
 ## Sign Up
+
 POST: https://api.antonmovies.nomoredomains.club/signup
+
 JSON example:
+
 `{
     "name": "Anton",
     "password": "123456",
@@ -11,21 +15,30 @@ JSON example:
 }`
 
 ## Sign In
+
 POST: https://api.antonmovies.nomoredomains.club/signin
+
 JSON example:
+
 `{
     "password": "123456",
     "email": "example@mail.ru"
 }`
+
 Response example:
+
 `{
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2FhMDA0N2FmMzdiNjk2NzlkZjZhMDIiLCJpYXQiOjE2NzIxMzkwNjEsImV4cCI6MTY3Mjc0Mzg2MX0.9uC7_lZnIO4dUOATaT6wVYAQ6V0jMNlEtzqu4tr-u7U"
 }`
 
 ## Create movie
+
 POST: https://api.antonmovies.nomoredomains.club/movies
+
 Need Bearer Token Auth
+
 JSON example:
+
 `{
     "country": "USA",
     "director": "Stiven",
@@ -41,20 +54,29 @@ JSON example:
 }`
 
 ## Get user movies
+
 GET: https://api.antonmovies.nomoredomains.club/movies
+
 Need Bearer Token Auth
 
 ## Delete user movie by id
+
 DELETE: https://api.antonmovies.nomoredomains.club/movies/movieId
+
 Need Bearer Token Auth
 
 ## Get user info
+
 GET: https://api.antonmovies.nomoredomains.club/users/me
+
 Need Bearer Token Auth
 
 ## Update user info
+
 PATCH: https://api.antonmovies.nomoredomains.club/users/me
+
 Need Bearer Token Auth
+
 JSON example:
 `{
     "name": "Anton",
