@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+const {
+  checkLinkMessage,
+} = require('../utils/constants');
+
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
@@ -25,17 +29,17 @@ const movieSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
-    validate: [validator.isURL, 'Проверьте правильность написания ссылки'],
+    validate: [validator.isURL, checkLinkMessage],
   },
   trailerLink: {
     type: String,
     required: true,
-    validate: [validator.isURL, 'Проверьте правильность написания ссылки'],
+    validate: [validator.isURL, checkLinkMessage],
   },
   thumbnail: {
     type: String,
     required: true,
-    validate: [validator.isURL, 'Проверьте правильность написания ссылки'],
+    validate: [validator.isURL, checkLinkMessage],
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

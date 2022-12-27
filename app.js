@@ -4,13 +4,15 @@ const { errors } = require('celebrate');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const limiter = require('./utils/limiter');
-const { errorCodes } = require('./utils/errorCodes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const errorHandler = require('./middlewares/errors');
 
 const router = require('./routes/index');
 
 const { PORT = 3000, NODE_ENV, DATA_BASE_URL } = process.env;
 const app = express();
+
+app.use(requestLogger);
 
 app.use(limiter);
 
@@ -29,26 +31,13 @@ mongoose.connect(dataBaseUrl, (err) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(requestLogger);
-
 app.use(router);
 
 app.use(errorLogger);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = errorCodes.internalServerError, message } = err;
-
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === errorCodes.internalServerError
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

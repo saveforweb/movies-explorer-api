@@ -3,6 +3,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const errorsList = require('../errors/index');
+const {
+  incorrectDataCreateUserMessage,
+  incorrectMailCreateUserMessage,
+  incorrectMailAndPasswordMessage,
+  userNotFoundMessage,
+  incorrectDataGetUserMessage,
+  incorrectDataUpdateUserMessage,
+} = require('../utils/constants');
 
 const tokenString = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
 
@@ -22,9 +30,9 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new errorsList.BadRequestError('Переданы некорректные данные при создании пользователя.'));
+        next(new errorsList.BadRequestError(incorrectDataCreateUserMessage));
       } else if (err.code === 11000) {
-        next(new errorsList.ConflictError('Пользователь с таким email зарегистрован.'));
+        next(new errorsList.ConflictError(incorrectMailCreateUserMessage));
       } else {
         next(err);
       }
@@ -38,7 +46,7 @@ module.exports.login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return next(new errorsList.UnauthorizedError('Неправильные почта или пароль.'));
+        return next(new errorsList.UnauthorizedError(incorrectMailAndPasswordMessage));
       }
 
       userId = user._id;
@@ -46,7 +54,7 @@ module.exports.login = (req, res, next) => {
     })
     .then((matched) => {
       if (!matched) {
-        return next(new errorsList.UnauthorizedError('Неправильные почта или пароль.'));
+        return next(new errorsList.UnauthorizedError(incorrectMailAndPasswordMessage));
       }
 
       const token = jwt.sign({ _id: userId }, tokenString, { expiresIn: '7d' });
@@ -61,14 +69,14 @@ module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (user === null) {
-        next(new errorsList.NotFoundError('Пользователь не найден.'));
+        next(new errorsList.NotFoundError(userNotFoundMessage));
       } else {
         res.send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new errorsList.BadRequestError('Переданы некорректные данные при запросе пользователя.'));
+        next(new errorsList.BadRequestError(incorrectDataGetUserMessage));
       } else {
         next(err);
       }
@@ -84,16 +92,16 @@ module.exports.updateUser = (req, res, next) => {
   })
     .then((user) => {
       if (user === null) {
-        next(new errorsList.NotFoundError('Пользователь не найден.'));
+        next(new errorsList.NotFoundError(userNotFoundMessage));
       } else {
         res.send({ data: user });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new errorsList.BadRequestError('Переданы некорректные данные при обновлении профиля.'));
+        next(new errorsList.BadRequestError(incorrectDataUpdateUserMessage));
       } else if (err.name === 'ValidationError') {
-        next(new errorsList.BadRequestError('Переданы некорректные данные при обновлении профиля.'));
+        next(new errorsList.BadRequestError(incorrectDataUpdateUserMessage));
       } else {
         next(err);
       }
