@@ -1,8 +1,14 @@
-# movies-explorer-api
+# API приложения Cinemus
+Это дипломная работа в рамках обучения на курсе веб-разработки в Яндекс Практикум.
+
+## Описание проекта
+API для веб-сервиса поиска и отбора любимых фильмов.
+
+## Функциональность бэкэнда (API)
 
 Домен API: [https://api.antonmovies.nomoredomains.club](https://api.antonmovies.nomoredomains.club)
 
-## Sign Up
+### Sign Up
 
 POST: https://api.antonmovies.nomoredomains.club/signup
 
@@ -14,7 +20,7 @@ JSON example:
     "email": "example@mail.ru"
 }`
 
-## Sign In
+### Sign In
 
 POST: https://api.antonmovies.nomoredomains.club/signin
 
@@ -31,7 +37,7 @@ Response example:
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2FhMDA0N2FmMzdiNjk2NzlkZjZhMDIiLCJpYXQiOjE2NzIxMzkwNjEsImV4cCI6MTY3Mjc0Mzg2MX0.9uC7_lZnIO4dUOATaT6wVYAQ6V0jMNlEtzqu4tr-u7U"
 }`
 
-## Create movie
+### Create movie
 
 POST: https://api.antonmovies.nomoredomains.club/movies
 
@@ -53,25 +59,25 @@ JSON example:
     "nameEN": "Name on english"
 }`
 
-## Get user movies
+### Get user movies
 
 GET: https://api.antonmovies.nomoredomains.club/movies
 
 Need Bearer Token Auth
 
-## Delete user movie by id
+### Delete user movie by id
 
 DELETE: https://api.antonmovies.nomoredomains.club/movies/movieId
 
 Need Bearer Token Auth
 
-## Get user info
+### Get user info
 
 GET: https://api.antonmovies.nomoredomains.club/users/me
 
 Need Bearer Token Auth
 
-## Update user info
+### Update user info
 
 PATCH: https://api.antonmovies.nomoredomains.club/users/me
 
