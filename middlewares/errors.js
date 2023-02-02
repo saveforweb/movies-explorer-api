@@ -1,4 +1,5 @@
 const { errorCodes } = require('../utils/errorCodes');
+
 const { serverErrorMessage } = require('../utils/constants');
 
 module.exports = ((err, req, res, next) => {
