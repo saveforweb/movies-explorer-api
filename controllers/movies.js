@@ -56,7 +56,7 @@ module.exports.createMovie = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  Movie.findOne({ movieId: req.params.movieId })
+  Movie.findOne({ _id: req.params.movieId })
     .then((movie) => {
       if (movie === null) {
         next(new errorsList.NotFoundError(movieNotFoundMessage));
