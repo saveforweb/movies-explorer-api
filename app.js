@@ -14,7 +14,6 @@ const { PORT = 3000, NODE_ENV, DATA_BASE_URL } = process.env;
 const app = express();
 
 app.use(cors());
-app.options('*', cors());
 
 app.use(requestLogger);
 
