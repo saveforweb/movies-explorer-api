@@ -14,7 +14,7 @@ const { PORT = 3000, NODE_ENV, DATA_BASE_URL } = process.env;
 const app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3000'],
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
 };
 
 app.use(cors(corsOptions));
